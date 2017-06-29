@@ -14,6 +14,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/common/log"
 	"github.com/prometheus/common/version"
+	"github.com/tamalsaha/go-oneliners"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -61,6 +62,7 @@ func ExportMetrics(w http.ResponseWriter, r *http.Request) {
 	if podIP == "" {
 		podIP = "127.0.0.1"
 	}
+	oneliners.FILE("apiGroup", apiGroup, "namespace", namespace, "name", name, "podIP", podIP)
 
 	switch apiGroup {
 	case "extensions":
@@ -104,17 +106,22 @@ func ExportMetrics(w http.ResponseWriter, r *http.Request) {
 		promhttp.HandlerFor(reg, promhttp.HandlerOpts{}).ServeHTTP(w, r)
 		return
 	case api.GroupName:
+		oneliners.FILE()
 		var reg *prometheus.Registry
 		if val, ok := registerers.Get(r.URL.Path); ok {
+			oneliners.FILE()
 			reg = val.(*prometheus.Registry)
 		} else {
+			oneliners.FILE()
 			reg = prometheus.NewRegistry()
 			if absent := registerers.SetIfAbsent(r.URL.Path, reg); !absent {
+				oneliners.FILE()
 				r2, _ := registerers.Get(r.URL.Path)
 				reg = r2.(*prometheus.Registry)
 			} else {
 				log.Infof("Configuring exporter for appscode ingress %s in namespace %s", name, namespace)
 				engress, err := extClient.Ingresses(namespace).Get(name)
+				oneliners.FILE(err)
 				if kerr.IsNotFound(err) {
 					http.NotFound(w, r)
 					return
@@ -122,12 +129,16 @@ func ExportMetrics(w http.ResponseWriter, r *http.Request) {
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 					return
 				}
+				oneliners.FILE()
 				scrapeURL, err := getScrapeURL(engress, podIP)
+				oneliners.FILE(err)
 				if err != nil {
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 					return
 				}
+				oneliners.FILE(scrapeURL)
 				exporter, err := hpe.NewExporter(scrapeURL, selectedServerMetrics, haProxyTimeout)
+				oneliners.FILE(err)
 				if err != nil {
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 					return
