@@ -23,25 +23,17 @@ prometheus-prometheus-0   2/2       Running   0         26s
 ```
 
 ```console
-$ CLOUD_PROVIDER=minikube CLOUD_CONFIG= cat ./hack/deploy/voyager-without-rbac.yaml | envsubst | kubectl apply -f -
-
-~/g/s/g/a/voyager (d2) $ 
-~/g/s/g/a/voyager (d2) $ kubectl create -f ./hack/deploy/voyager-without-rbac.yaml
-deployment "voyager-operator" created
-service "voyager-operator" created
-~/g/s/g/a/voyager (d2) $ 
-
-
+$ ./hack/deploy/minikube.sh
 
 $ kubectl get pods -l app=voyager --all-namespaces --watch
 NAMESPACE     NAME                                READY     STATUS    RESTARTS   AGE
 kube-system   voyager-operator-2464855905-gfdlq   1/1       Running   0          22s
-^C⏎                                                                                                                ~/g/s/g/k/cli (master) $ 
-
-
-
-
+^C⏎
 ```
+
+
+
+```console
 $ kubectl delete deployment voyager-operator -n kube-system
 deployment "voyager-operator" deleted
 $ kubectl delete svc voyager-operator -n kube-system
