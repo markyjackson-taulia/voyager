@@ -6,7 +6,7 @@ metadata:
 spec:
   serviceMonitorSelector:
     matchLabels:
-      app: kubedb
+      app: voyager
   version: v1.7.0
   resources:
     requests:
