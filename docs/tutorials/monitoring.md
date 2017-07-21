@@ -31,6 +31,15 @@ kube-system   voyager-operator-2464855905-gfdlq   1/1       Running   0         
 ^C⏎
 ```
 
+```console
+$ sudo nano /etc/hosts
+
+127.0.0.1       localhost
+127.0.1.1       beast
+192.168.99.100       voyager.demo
+```
+
+
 
 
 

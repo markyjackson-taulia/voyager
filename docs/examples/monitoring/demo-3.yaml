@@ -8,8 +8,14 @@ metadata:
     ingress.appscode.com/monitoring-agent: 'coreos-prometheus-operator'
     ingress.appscode.com/service-monitor-labels: '{"app": "kubedb"}'
     ingress.appscode.com/service-monitor-namespace: 'demo'
-
 spec:
   backend:
     serviceName: test-server
     servicePort: 80
+  rules:
+  - host: voyager.demo
+    http:
+      paths:
+      - backend:
+          serviceName: test-server
+          servicePort: 80

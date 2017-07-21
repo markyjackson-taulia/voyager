@@ -45,3 +45,10 @@ spec:
   backend:
     serviceName: test-server
     servicePort: 80
+  rules:
+  - host: voyager.demo
+    http:
+      paths:
+      - backend:
+          serviceName: test-server
+          servicePort: 80
